@@ -1,19 +1,64 @@
-import { Button } from "@/components/ui/button";
-import { CiMenuBurger } from "react-icons/ci";
+import { LogOut, Menu, Moon, Sun } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { logout } from "../redux/userSlice";
 
-const Header = () => {
+const Header = ({ darkMode, setSidebarOpen, sidebarOpen, toggleDarkMode }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.user);
+  console.log(user);
+
   return (
-    <nav className="flex justify-between items-center p-8 text-white bg-blue-500">
-      <div className="flex justify-center items-center">
-        <CiMenuBurger />
-        <p className="text-2xl font-bold">Welcome back user</p>
+    <header className="sticky top-0 z-10 border-b bg-background shadow-sm">
+      <div className="container flex h-16 items-center justify-between px-4">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted p-2 text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus:outline-none"
+            aria-label={sidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+          <div className="hidden md:block">
+            <h1 className="text-xl font-semibold">Dashboard</h1>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-4">
+          {user && (
+            <div className="hidden items-center gap-2 md:flex">
+              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-white">
+                {user.name ? user.name.charAt(0).toUpperCase() : "U"}
+              </div>
+              <span className="text-sm font-medium">{user.name}</span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={toggleDarkMode}
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted p-2 text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus:outline-none"
+              aria-label={
+                darkMode ? "Switch to light mode" : "Switch to dark mode"
+              }
+            >
+              {darkMode ? (
+                <Sun className="h-5 w-5 text-amber-500" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </button>
+
+            <button
+              className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted p-2 text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus:outline-none"
+              aria-label="Log out"
+            >
+              <LogOut onClick={() => dispatch(logout())} className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
       </div>
-      <div>
-        <Button className="px-5 py-4 text-xl bg-red-500 text-white rounded-lg cursor-pointer hover:bg-red-700">
-          Logout
-        </Button>
-      </div>
-    </nav>
+    </header>
   );
 };
 
