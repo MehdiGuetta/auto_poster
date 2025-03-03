@@ -1,4 +1,4 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from "../Pages/Dashboard";
 import PagesSection from "../Pages/PagesSection";
 import Groups from "../Pages/Groups";
@@ -7,56 +7,60 @@ import PageChecker from "../Pages/PageChecker";
 import NotFound from "../Pages/NotFound";
 import Login from "../Pages/Login";
 import Register from "../Pages/Register";
-import Test from "../Test";
-import SignupTest from "../SighupTest";
-// import PrivateRoute from "../components/PrivateRoute";
+import ProtectedRoute from "../router/ProtectedRoute"; // Import the protected route
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Login />,
+    element: <Navigate to="/login" replace />,
   },
   {
     path: "/login",
-    element: <Login />,
+    element: <ProtectedRoute isProtected={false} />, // No protection for /login
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+    ],
   },
   {
     path: "/register",
     element: <Register />,
   },
   {
-    path: "/test",
-    element: <Test />,
-  },
-  {
-    path: "/signup",
-    element: <SignupTest />,
-  },
-  {
-    element: <Dashboard />,
+    element: <ProtectedRoute isProtected={true} />, // Protect all Dashboard routes
     children: [
       {
-        path: "/dashboard/pages",
-        element: <PagesSection />,
-      },
-      {
-        path: "/dashboard/groups",
-        element: <Groups />,
-      },
-      {
-        path: "/dashboard/pages-spy",
-        element: <PagesSpy />,
-      },
-      {
-        path: "/dashboard/page-checker",
-        element: <PageChecker />,
-      },
-
-      {
-        path: "*",
-        element: <NotFound />,
+        element: <Dashboard />, // Dashboard layout
+        children: [
+          {
+            path: "/dashboard", // 🔄 Redirect "/dashboard/" to "/dashboard/pages"
+            element: <Navigate to="/dashboard/pages" replace />,
+          },
+          {
+            path: "/dashboard/pages",
+            element: <PagesSection />,
+          },
+          {
+            path: "/dashboard/groups",
+            element: <Groups />,
+          },
+          {
+            path: "/dashboard/pages-spy",
+            element: <PagesSpy />,
+          },
+          {
+            path: "/dashboard/page-checker",
+            element: <PageChecker />,
+          },
+        ],
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
 

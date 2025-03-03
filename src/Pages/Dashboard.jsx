@@ -1,15 +1,12 @@
-import { Menu, Sun, Moon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
 import AppSidebar from "../components/AppSidebar";
-import { useEffect } from "react";
-// import { useSelector } from "react-redux";
+import Header from "../components/Header";
 
 const Layout = () => {
-  // const userData = useSelector((state) => state.user);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  // console.log(userData);
+  
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
@@ -33,45 +30,29 @@ const Layout = () => {
   };
 
   return (
-    <div
-      className={`min-h-screen ${
-        darkMode ? "dark" : ""
-      } bg-gray-50 dark:bg-gray-900 dark:text-white`}
-    >
+    <div className="flex h-screen overflow-hidden bg-gray-50 dark:bg-gray-900 dark:text-white">
       {/* Sidebar */}
       <AppSidebar sidebarOpen={sidebarOpen} />
 
       {/* Main content */}
-      <div
-        className={`p-4 ${
-          sidebarOpen ? "ml-64" : ""
-        } transition-all duration-300 dark:bg-gray-900 dark:text-white`}
+      <div 
+        className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ease-in-out ${
+          sidebarOpen ? "lg:ml-64" : ""
+        }`}
       >
         {/* Top bar */}
-        <div className="mb-4 flex items-center">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-          >
-            <Menu className="h-6 w-6" />
-          </button>
-          <div className="flex items-center space-x-4">
-            <button
-              onClick={toggleDarkMode}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-            >
-              {darkMode ? (
-                <Sun className="h-5 w-5 text-yellow-500" />
-              ) : (
-                <Moon className="h-5 w-5 text-gray-500" />
-              )}
-            </button>
-              
-          </div>
-        </div>
+        <Header
+          darkMode={darkMode}
+          setSidebarOpen={setSidebarOpen}
+          sidebarOpen={sidebarOpen}
+          toggleDarkMode={toggleDarkMode}
+        />
+        
         {/* Page content */}
-        <main className="container mx-auto">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-6 md:px-6 lg:px-8">
+          <div className="mx-auto w-full max-w-7xl">
+            <Outlet />
+          </div>
         </main>
       </div>
     </div>
