@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Mail, KeyRound, Loader2, LogIn, Sun, Moon, EyeOff, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-
-  CardFooter,
-} from "@/components/ui/card";
+  Mail,
+  KeyRound,
+  Loader2,
+  LogIn,
+  Sun,
+  Moon,
+  EyeOff,
+  Eye,
+} from "lucide-react";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -17,12 +20,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { loginSchema } from "@/lib/validations/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { login } from "../redux/actions";
 import axios from "axios";
+import { loginUser } from "../redux/userSlice";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -41,7 +45,6 @@ const Login = () => {
       password: "",
     },
   });
-
 
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
@@ -72,15 +75,16 @@ const Login = () => {
       // Fetch users and match credentials on submit
       const response = await axios.post(`${backendUrl}login`, data);
 
-      const user = response.data;
+      const user = response.data.user;
 
-      console.log(user);
+      dispatch(loginUser(user));
+
       if (user) {
-        dispatch(login(user));
-        console.log(user);
+        dispatch(loginUser(user));
+
         // Simulate API call (replace with real API call)
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        navigate("/dashboard/");
+        navigate("/dashboard");
       } else {
         console.error("User not found or incorrect credentials");
         // Optionally, show an error message here
@@ -107,26 +111,35 @@ const Login = () => {
           )}
         </button>
       </div>
-      
+
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 text-white mb-4 shadow-lg">
             <LogIn className="h-8 w-8" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Welcome back</h1>
-          <p className="text-gray-600 dark:text-gray-300 mt-2">Sign in to your account</p>
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+            Welcome back
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 mt-2">
+            Sign in to your account
+          </p>
         </div>
-        
+
         <Card className="border-0 shadow-xl bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
           <CardContent className="pt-6">
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5">
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-5"
+              >
                 <FormField
                   control={form.control}
                   name="email"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel className="text-gray-700 dark:text-gray-200 font-medium">Email</FormLabel>
+                      <FormLabel className="text-gray-700 dark:text-gray-200 font-medium">
+                        Email
+                      </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Mail className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
@@ -147,7 +160,9 @@ const Login = () => {
                   render={({ field }) => (
                     <FormItem>
                       <div className="flex justify-between items-center">
-                        <FormLabel className="text-gray-700 dark:text-gray-200 font-medium">Password</FormLabel>
+                        <FormLabel className="text-gray-700 dark:text-gray-200 font-medium">
+                          Password
+                        </FormLabel>
                         <Link
                           to="/forgot-password"
                           className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
@@ -167,7 +182,7 @@ const Login = () => {
                           <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-3 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                            className="absolute right-3 top-2.5 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 bg-gray-200 dark:bg-gray-700 dark:hover:text-gray-200 transition-colors rounded-lg border border-transparent text-base font-medium cursor-pointer duration-200 "
                             tabIndex={-1}
                           >
                             {showPassword ? (
@@ -211,8 +226,6 @@ const Login = () => {
             </div>
           </CardFooter>
         </Card>
-        
-      
       </div>
     </div>
   );

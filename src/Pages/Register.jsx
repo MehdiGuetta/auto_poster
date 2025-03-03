@@ -108,7 +108,7 @@ const Register = () => {
       <div className="absolute top-4 right-4 z-10">
         <button
           onClick={toggleDarkMode}
-          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-md hover:shadow-lg transition-all duration-300"
+          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-md hover:shadow-lg transition-all duration-300 border border-transparent px-5 py-2 text-base font-medium bg-[#1a1a1a] cursor-pointer hover:border-gray-500"
           aria-label="Toggle dark mode"
         >
           {darkMode ? (
@@ -200,10 +200,10 @@ const Register = () => {
                             className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
                             {...field}
                           />
-                          <button
+                          <div
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-3 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                            className="absolute right-3 top-2.5 p-1 text-gray-500 dark:text-gray-400 hover:text-gray-700 bg-gray-200 dark:bg-gray-700 dark:hover:text-gray-200 transition-colors rounded-lg border border-transparent text-base font-medium cursor-pointer duration-200"
                             tabIndex={-1}
                           >
                             {showPassword ? (
@@ -211,7 +211,7 @@ const Register = () => {
                             ) : (
                               <Eye className="h-5 w-5" />
                             )}
-                          </button>
+                          </div>
                         </div>
                       </FormControl>
                       <FormMessage className="text-red-500" />
@@ -255,7 +255,7 @@ const Register = () => {
                 /> */}
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-300"
+                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer  hover:border-gray-500"
                   disabled={isLoading}
                 >
                   {isLoading ? (
