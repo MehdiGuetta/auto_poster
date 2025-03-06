@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Dialog,
   DialogContent,
@@ -83,7 +82,7 @@ export function PagesSection({ pages, onAddPage, onUpdatePage, onDeletePage }) {
               Add New Page
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[550px]">
+          <DialogContent className="sm:max-w-[650px]">
             <DialogHeader>
               <DialogTitle>Add New Facebook Page</DialogTitle>
             </DialogHeader>
@@ -133,9 +132,6 @@ export function PagesSection({ pages, onAddPage, onUpdatePage, onDeletePage }) {
                               "/placeholder.svg?height=56&width=56";
                           }}
                         />
-                        <Badge className="absolute -bottom-1 -right-1 text-xs">
-                          FB
-                        </Badge>
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-lg truncate">
