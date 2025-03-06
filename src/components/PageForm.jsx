@@ -12,17 +12,80 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
     name: initialData?.name || "",
     logoUrl: initialData?.logoUrl || "",
     moderatorCookies: initialData?.moderatorCookies || "",
-    userAgent:
-      initialData?.userAgent ||
-      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+    userAgent: initialData?.userAgent || "",
     proxy: initialData?.proxy || "",
   });
 
+  const [errors, setErrors] = useState({});
   const [previewLogo, setPreviewLogo] = useState(formData.logoUrl);
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Facebook Page ID validation
+    if (!formData.id.trim()) {
+      newErrors.id = "Facebook Page ID is required";
+    }
+
+    // Page Name validation
+    if (!formData.name.trim()) {
+      newErrors.name = "Page Name is required";
+    }
+
+    // Logo URL validation (optional)
+    if (formData.logoUrl && !isValidUrl(formData.logoUrl)) {
+      newErrors.logoUrl = "Please enter a valid URL";
+    } else if (!formData.logoUrl) {
+      newErrors.logoUrl = "Page Logo URL is required";
+    }
+
+    // Moderator Cookies validation
+    if (!formData.moderatorCookies.trim()) {
+      newErrors.moderatorCookies = "Moderator Cookies are required";
+    } else {
+      try {
+        JSON.parse(formData.moderatorCookies);
+      } catch (e) {
+        newErrors.moderatorCookies = "Please enter valid JSON";
+      }
+    }
+
+    // User Agent validation
+    if (!formData.userAgent.trim()) {
+      newErrors.userAgent = "User Agent is required";
+    }
+
+    // Proxy validation
+    if (!formData.proxy) {
+      newErrors.proxy = "Proxy is required";
+    } else {
+      const proxyRegex = /^(?:[a-zA-Z0-9]+:[a-zA-Z0-9]+@)?[a-zA-Z0-9.-]+:\d+$/;
+      if (!proxyRegex.test(formData.proxy)) {
+        newErrors.proxy = "Invalid proxy format";
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const isValidUrl = (string) => {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
 
     // Update logo preview when URL changes
     if (name === "logoUrl") {
@@ -32,7 +95,15 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(formData);
+    if (validateForm()) {
+      onSubmit(formData);
+    }
+  };
+
+  const getInputClassName = (fieldName) => {
+    return `${
+      errors[fieldName] ? "border-red-500 focus:ring-red-500" : ""
+    } font-mono text-sm`;
   };
 
   return (
@@ -62,12 +133,9 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                 value={formData.id}
                 onChange={handleChange}
                 placeholder="Enter Facebook Page ID"
-                className="font-mono text-sm"
-                required
+                className={getInputClassName("id")}
               />
-              <p className="text-xs text-muted-foreground">
-                The unique identifier for your Facebook page
-              </p>
+              {errors.id && <p className="text-xs text-red-500">{errors.id}</p>}
             </div>
 
             <div className="space-y-2">
@@ -81,8 +149,11 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                 value={formData.name}
                 onChange={handleChange}
                 placeholder="Enter Page Name"
-                required
+                className={getInputClassName("name")}
               />
+              {errors.name && (
+                <p className="text-xs text-red-500">{errors.name}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -98,10 +169,17 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                     value={formData.logoUrl}
                     onChange={handleChange}
                     placeholder="https://example.com/logo.png"
+                    className={getInputClassName("logoUrl")}
                   />
-                  <p className="text-xs text-muted-foreground mt-1">
-                    URL to the page logo image (optional)
-                  </p>
+                  {errors.logoUrl ? (
+                    <p className="text-xs text-red-500 mt-1">
+                      {errors.logoUrl}
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      URL to the page logo image (optional)
+                    </p>
+                  )}
                 </div>
                 <div className="h-16 w-16 rounded-full overflow-hidden border-2 border-muted bg-muted/30 flex items-center justify-center">
                   {previewLogo ? (
@@ -122,16 +200,6 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
 
         {/* Right column - Technical settings */}
         <div className="flex-1 space-y-5">
-          <div className="bg-slate-50 dark:bg-slate-950/30 p-4 rounded-lg mb-2">
-            <h3 className="text-sm font-medium text-slate-800 dark:text-slate-300 flex items-center gap-2 mb-1">
-              <Code className="h-4 w-4" />
-              Technical Settings
-            </h3>
-            <p className="text-xs text-slate-600/70 dark:text-slate-400/70">
-              Configure connection and browser settings
-            </p>
-          </div>
-
           <div className="space-y-4">
             <div className="space-y-2">
               <Label
@@ -147,12 +215,20 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                 value={formData.moderatorCookies}
                 onChange={handleChange}
                 placeholder='{"cookie1":"value1","cookie2":"value2"}'
-                className="font-mono text-xs resize-none"
+                className={`${getInputClassName(
+                  "moderatorCookies"
+                )} font-mono text-xs resize-none`}
                 rows={3}
               />
-              <p className="text-xs text-muted-foreground">
-                Authentication cookies in JSON format
-              </p>
+              {errors.moderatorCookies ? (
+                <p className="text-xs text-red-500">
+                  {errors.moderatorCookies}
+                </p>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Authentication cookies in JSON format
+                </p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -166,10 +242,14 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                 value={formData.userAgent}
                 onChange={handleChange}
                 placeholder="Mozilla/5.0 (Windows NT 10.0; Win64; x64)..."
-                className="font-mono text-xs resize-none"
+                className={`${getInputClassName(
+                  "userAgent"
+                )} font-mono text-xs resize-none`}
                 rows={2}
-                required
               />
+              {errors.userAgent && (
+                <p className="text-xs text-red-500">{errors.userAgent}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -183,11 +263,15 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
                 value={formData.proxy}
                 onChange={handleChange}
                 placeholder="ip:port or username:password@ip:port"
-                className="font-mono text-sm"
+                className={`${getInputClassName("proxy")} font-mono text-sm`}
               />
-              <p className="text-xs text-muted-foreground">
-                Format: ip:port or username:password@ip:port
-              </p>
+              {errors.proxy ? (
+                <p className="text-xs text-red-500">{errors.proxy}</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Format: ip:port or username:password@ip:port
+                </p>
+              )}
             </div>
           </div>
         </div>
@@ -213,5 +297,16 @@ export function PageForm({ initialData = {}, onSubmit, onCancel }) {
         </Button>
       </div>
     </form>
+  );
+}
+
+export default function App() {
+  return (
+    <div className="container mx-auto p-6">
+      <PageForm
+        onSubmit={(data) => console.log("Form submitted:", data)}
+        onCancel={() => console.log("Form cancelled")}
+      />
+    </div>
   );
 }
