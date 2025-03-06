@@ -1,15 +1,22 @@
 import { LogOut, Menu, Moon, Sun } from "lucide-react";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { logout } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../redux/userSlice";
+import { toggleDarkMode } from "../../redux/themeSlice";
 
-const Header = ({ darkMode, setSidebarOpen, sidebarOpen, toggleDarkMode }) => {
+const Header = ({ setSidebarOpen, sidebarOpen }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.user);
-  console.log(user);
+  const darkMode = useSelector((state) => state.theme.darkMode);
+
+  // Apply dark mode class to document
+  if (darkMode) {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
 
   return (
-    <header className="sticky top-0 z-10 border-b bg-background shadow-sm">
+    <header className="sticky  top-0 z-10 border-b bg-background shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-2">
           <button
@@ -36,7 +43,7 @@ const Header = ({ darkMode, setSidebarOpen, sidebarOpen, toggleDarkMode }) => {
 
           <div className="flex items-center gap-2">
             <button
-              onClick={toggleDarkMode}
+              onClick={() => dispatch(toggleDarkMode())}
               className="inline-flex h-10 w-10 items-center justify-center rounded-md bg-muted p-2 text-muted-foreground transition-colors hover:bg-muted/80 hover:text-foreground focus:outline-none"
               aria-label={
                 darkMode ? "Switch to light mode" : "Switch to dark mode"

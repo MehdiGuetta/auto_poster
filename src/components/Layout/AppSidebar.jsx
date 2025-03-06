@@ -10,6 +10,7 @@ import {
   UserCircle,
   Users,
   Eye,
+  Newspaper
 } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -19,7 +20,7 @@ import {
 } from "@/components/ui/collapsible";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { logout } from "../redux/userSlice";
+import { logout } from "../../redux/userSlice";
 
 // Replace the imported icons with Lucide icons for consistency
 const links = [
@@ -32,6 +33,11 @@ const links = [
     label: "Groups",
     path: "/dashboard/groups",
     icon: <Users size={18} />,
+  },
+  {
+    label: "Articles",
+    path: "/dashboard/articles",
+    icon: <Newspaper size={18} />,
   },
   {
     label: "Pages Spy",
@@ -56,7 +62,6 @@ export default function AppSidebar({ sidebarOpen }) {
   const user = {
     name: userRedux.name,
     email: userRedux.email,
-    avatar: "/placeholder.svg?height=40&width=40",
   };
 
   return (
@@ -85,7 +90,7 @@ export default function AppSidebar({ sidebarOpen }) {
                       flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 hover:text-black transition-colors duration-200
                       ${
                         isActive || activeLink === link.path
-                          ? "bg-primary text-white hover:bg-primary/95 dark:hover:bg-primary/95 transition-colors duration-200"
+                          ? "bg-primary text-white hover:bg-primary/95 dark:hover:bg-primary/95 hover:text-white transition-colors duration-200"
                           : "text-black dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors duration-200"
                       }
                     `}
@@ -130,7 +135,7 @@ export default function AppSidebar({ sidebarOpen }) {
                 onOpenChange={setProfileOpen}
                 className="w-full rounded-md border bg-card "
               >
-                <CollapsibleTrigger className="flex w-full items-center justify-between p-3 text-left bg-white dark:bg-black focus:outline-none ">
+                <CollapsibleTrigger className="flex w-full items-center justify-between p-3 text-left bg-white dark:bg-[#1c1c1d] focus:outline-none ">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-8 w-8">
                       <AvatarImage src={user.avatar} alt={user.name} />
