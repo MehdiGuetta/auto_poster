@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import AppSidebar from "../components/AppSidebar";
-import Header from "../components/Header";
+import AppSidebar from "../components/Layout/AppSidebar";
+import Header from "../components/Layout/Header";
 
 const Layout = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
-  
+
   useEffect(() => {
     const savedDarkMode = localStorage.getItem("darkMode") === "true";
     setDarkMode(savedDarkMode);
@@ -35,7 +35,7 @@ const Layout = () => {
       <AppSidebar sidebarOpen={sidebarOpen} />
 
       {/* Main content */}
-      <div 
+      <div
         className={`flex flex-col flex-1 overflow-hidden transition-all duration-300 ease-in-out ${
           sidebarOpen ? "lg:ml-64" : ""
         }`}
@@ -47,7 +47,7 @@ const Layout = () => {
           sidebarOpen={sidebarOpen}
           toggleDarkMode={toggleDarkMode}
         />
-        
+
         {/* Page content */}
         <main className="flex-1 overflow-y-auto overflow-x-hidden px-4 py-6 md:px-6 lg:px-8">
           <div className="mx-auto w-full max-w-7xl">

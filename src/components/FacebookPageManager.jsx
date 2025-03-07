@@ -155,7 +155,7 @@ export function FacebookPageManager() {
   return (
     <div className="space-y-8">
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="w-full grid grid-cols-4 h-auto p-1 gap-3 rounded-xl mb-8 shadow-sm">
+        <TabsList className="w-full grid grid-cols-4 h-auto p-1 gap-3 rounded-xl mb-8 shadow-sm ">
           <TabsTrigger value="pages">
             <LayoutDashboard className="h-4 w-4 mr-2" />
             Pages

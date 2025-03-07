@@ -6,7 +6,6 @@ import {
   KeyRound,
   Loader2,
   User,
-  Globe,
   Sun,
   Moon,
   EyeOff,
@@ -80,10 +79,7 @@ const Register = () => {
 
     try {
       // Send registration data to backend
-      const response = await axios.post(
-        `${backendUrl}register`,
-        data
-      );
+      const response = await axios.post(`${backendUrl}register`, data);
 
       console.log("Registration successful:", response.data);
 
@@ -104,24 +100,24 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
       <div className="absolute top-4 right-4 z-10">
         <button
           onClick={toggleDarkMode}
-          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-md hover:shadow-lg transition-all duration-300 border border-transparent px-5 py-2 text-base font-medium bg-[#1a1a1a] cursor-pointer hover:border-gray-500"
+          className="p-2 rounded-full bg-white/90 dark:bg-gray-800/90 shadow-md hover:shadow-lg transition-all duration-300"
           aria-label="Toggle dark mode"
         >
           {darkMode ? (
             <Sun className="h-5 w-5 text-yellow-500" />
           ) : (
-            <Moon className="h-5 w-5 text-indigo-600" />
+            <Moon className="h-5 w-5 text-blue-600" />
           )}
         </button>
       </div>
 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 text-white mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 text-white mb-4 shadow-lg">
             <UserPlus className="h-8 w-8" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -149,10 +145,10 @@ const Register = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <User className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                          <User className="absolute left-3 top-3.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
                           <Input
                             placeholder="John Doe"
-                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             {...field}
                           />
                         </div>
@@ -171,10 +167,10 @@ const Register = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                          <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
                           <Input
                             placeholder="you@example.com"
-                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             {...field}
                           />
                         </div>
@@ -193,11 +189,11 @@ const Register = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <KeyRound className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                          <KeyRound className="absolute left-3 top-3.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
                           <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Create a password"
-                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             {...field}
                           />
                           <div
@@ -228,12 +224,12 @@ const Register = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Globe className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400 z-10" />
+                          <Globe className="absolute left-3 top-3 h-5 w-5 text-blue-500 dark:text-blue-400 z-10" />
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
-                            <SelectTrigger className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent">
+                            <SelectTrigger className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent">
                               <SelectValue placeholder="Select your timezone" />
                             </SelectTrigger>
                             <SelectContent className="max-h-[200px]">
@@ -255,7 +251,7 @@ const Register = () => {
                 /> */}
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white cursor-pointer  hover:border-gray-500"
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white cursor-pointer"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -275,7 +271,7 @@ const Register = () => {
               Already have an account?{" "}
               <Link
                 to="/login"
-                className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 Sign in
               </Link>

@@ -193,7 +193,7 @@ export function PostFilterSection({ pages, posts, onDeletePost }) {
               type="date"
               value={selectedDate ? selectedDate.split("T")[0] : ""}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="bg-background"
+              className="bg-background "
             />
           </div>
           <div className="space-y-2">

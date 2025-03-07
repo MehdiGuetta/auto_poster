@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import Dashboard from "../Pages/Dashboard";
-import PagesSection from "../Pages/PagesSection";
+import Pages from "../Pages/Pages";
 import Groups from "../Pages/Groups";
 import PagesSpy from "../Pages/PagesSpy";
 import PageChecker from "../Pages/PageChecker";
@@ -40,7 +40,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/dashboard/pages",
-            element: <PagesSection />,
+            element: <Pages />,
           },
           {
             path: "/dashboard/groups",

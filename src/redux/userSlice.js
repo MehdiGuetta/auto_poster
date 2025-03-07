@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: JSON.parse(localStorage.getItem("user")) || null,
+  token: localStorage.getItem("token") || null, // Retrieve token from localStorage
   isAuthenticated: !!localStorage.getItem("user"), // Check if the user exists in localStorage
+  
 };
 
 const userSlice = createSlice({
@@ -20,8 +22,12 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem("user"); // Remove user from localStorage
     },
+    setToken: (state, action) => {
+      state.token = action.payload;
+      localStorage.setItem("token", action.payload); // Save token in localStorage
+    },
   },
 });
 
-export const { loginUser, logout } = userSlice.actions;
+export const { loginUser, logout, setToken } = userSlice.actions;
 export default userSlice.reducer;

@@ -26,7 +26,7 @@ import { loginSchema } from "@/lib/validations/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { loginUser } from "../redux/userSlice";
+import { loginUser, setToken } from "../redux/userSlice";
 
 const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
@@ -34,6 +34,7 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -70,34 +71,34 @@ const Login = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
+    setLoginError(""); // Reset error message
 
     try {
-      // Fetch users and match credentials on submit
       const response = await axios.post(`${backendUrl}login`, data);
 
       const user = response.data.user;
+      const token = response.data.token;
+
+      console.log(user)
 
       dispatch(loginUser(user));
+      dispatch(setToken(token));
 
       if (user) {
-        dispatch(loginUser(user));
-
-        // Simulate API call (replace with real API call)
-        await new Promise((resolve) => setTimeout(resolve, 1000));
         navigate("/dashboard");
-      } else {
-        console.error("User not found or incorrect credentials");
-        // Optionally, show an error message here
       }
     } catch (error) {
       console.error("Login failed:", error);
+      setLoginError(
+        error.response?.data?.message || "Login failed. Please try again."
+      );
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-blue-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 p-4">
       <div className="absolute top-4 right-4 z-10">
         <button
           onClick={toggleDarkMode}
@@ -107,14 +108,14 @@ const Login = () => {
           {darkMode ? (
             <Sun className="h-5 w-5 text-yellow-500 " />
           ) : (
-            <Moon className="h-5 w-5 text-indigo-600" />
+            <Moon className="h-5 w-5 text-blue-600" />
           )}
         </button>
       </div>
 
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-600 text-white mb-4 shadow-lg">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-blue-600 text-white mb-4 shadow-lg">
             <LogIn className="h-8 w-8" />
           </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
@@ -142,10 +143,10 @@ const Login = () => {
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
-                          <Mail className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                          <Mail className="absolute left-3 top-3.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
                           <Input
                             placeholder="you@example.com"
-                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             {...field}
                           />
                         </div>
@@ -165,18 +166,18 @@ const Login = () => {
                         </FormLabel>
                         <Link
                           to="/forgot-password"
-                          className="text-xs text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+                          className="text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
                         >
                           Forgot password?
                         </Link>
                       </div>
                       <FormControl>
                         <div className="relative">
-                          <KeyRound className="absolute left-3 top-3 h-5 w-5 text-indigo-500 dark:text-indigo-400" />
+                          <KeyRound className="absolute left-3 top-3.5 h-5 w-5 text-blue-500 dark:text-blue-400" />
                           <Input
                             type={showPassword ? "text" : "password"}
                             placeholder="Enter your password"
-                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-transparent"
+                            className="pl-10 h-12 rounded-lg border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent"
                             {...field}
                           />
                           <button
@@ -197,9 +198,14 @@ const Login = () => {
                     </FormItem>
                   )}
                 />
+                {loginError && (
+                  <p className="text-red-500 text-md text-center">
+                    {loginError}
+                  </p>
+                )}
                 <Button
                   type="submit"
-                  className="w-full h-12 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-300"
+                  className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-colors duration-300"
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -219,7 +225,7 @@ const Login = () => {
               Don{"'"}t have an account?{" "}
               <Link
                 to="/register"
-                className="font-medium text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors"
+                className="font-medium text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 transition-colors"
               >
                 Create account
               </Link>

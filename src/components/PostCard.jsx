@@ -1,23 +1,40 @@
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
-import { Eye, Share2, Trash2, Calendar, MessageCircle, Clock } from "lucide-react"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardFooter,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Eye,
+  Share2,
+  Trash2,
+  Calendar,
+  MessageCircle,
+  Clock,
+} from "lucide-react";
 
 export function PostCard({ post, pageName, onDelete }) {
-  const [isPreviewOpen, setIsPreviewOpen] = useState(false)
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString)
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-    }).format(date)
-  }
+    }).format(date);
+  };
 
   return (
     <>
@@ -28,7 +45,7 @@ export function PostCard({ post, pageName, onDelete }) {
             alt={post.title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
-              e.target.src = "/placeholder.svg?height=192&width=384"
+              e.target.src = "/placeholder.svg?height=192&width=384";
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -47,7 +64,12 @@ export function PostCard({ post, pageName, onDelete }) {
               size="icon"
               className="h-8 w-8 rounded-full bg-background/80 backdrop-blur-sm"
               onClick={() =>
-                window.open(`https://facebook.com/share?url=${encodeURIComponent(post.imageUrl)}`, "_blank")
+                window.open(
+                  `https://facebook.com/share?url=${encodeURIComponent(
+                    post.imageUrl
+                  )}`,
+                  "_blank"
+                )
               }
             >
               <Share2 className="h-4 w-4" />
@@ -56,7 +78,7 @@ export function PostCard({ post, pageName, onDelete }) {
             <Button
               variant="destructive"
               size="icon"
-              className="h-8 w-8 rounded-full bg-destructive/80 backdrop-blur-sm"
+              className="h-8 w-8 rounded-full bg-red-500 backdrop-blur-sm"
               onClick={onDelete}
             >
               <Trash2 className="h-4 w-4" />
@@ -66,7 +88,10 @@ export function PostCard({ post, pageName, onDelete }) {
         </div>
         <CardHeader className="pb-2 relative">
           <div className="flex justify-between items-center mb-2">
-            <Badge variant="secondary" className="font-medium">
+            <Badge
+              variant="secondary"
+              className="font-medium"
+            >
               {pageName}
             </Badge>
             <div className="flex items-center text-xs text-muted-foreground">
@@ -81,7 +106,9 @@ export function PostCard({ post, pageName, onDelete }) {
         <CardContent className="pb-2 flex-grow">
           <div className="flex items-start gap-2">
             <MessageCircle className="h-4 w-4 text-muted-foreground mt-0.5 flex-shrink-0" />
-            <p className="text-muted-foreground line-clamp-3 text-sm">{post.comment}</p>
+            <p className="text-muted-foreground line-clamp-3 text-sm">
+              {post.comment}
+            </p>
           </div>
         </CardContent>
         <CardFooter className="pt-0 text-xs text-muted-foreground border-t mt-auto">
@@ -104,7 +131,7 @@ export function PostCard({ post, pageName, onDelete }) {
                 <Calendar className="h-3 w-3" />
                 {formatDate(post.date)}
               </Badge>
-              <Badge>{pageName}</Badge>
+              <Badge className="text-white dark:text-white">{pageName}</Badge>
             </div>
             <div className="aspect-video overflow-hidden rounded-md">
               <img
@@ -112,7 +139,7 @@ export function PostCard({ post, pageName, onDelete }) {
                 alt={post.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
-                  e.target.src = "/placeholder.svg?height=300&width=600"
+                  e.target.src = "/placeholder.svg?height=300&width=600";
                 }}
               />
             </div>
@@ -123,10 +150,10 @@ export function PostCard({ post, pageName, onDelete }) {
               <Button
                 variant="destructive"
                 onClick={() => {
-                  onDelete()
-                  setIsPreviewOpen(false)
+                  onDelete();
+                  setIsPreviewOpen(false);
                 }}
-                className="gap-1"
+                className="gap-1 bg-red-500"
               >
                 <Trash2 className="h-4 w-4" />
                 Delete Post
@@ -136,6 +163,5 @@ export function PostCard({ post, pageName, onDelete }) {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }
-
