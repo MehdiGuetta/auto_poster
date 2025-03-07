@@ -79,7 +79,12 @@ const Register = () => {
 
     try {
       // Send registration data to backend
-      const response = await axios.post(`${backendUrl}register`, data);
+      const response = await axios.post(`${backendUrl}register`, data, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       console.log("Registration successful:", response.data);
 

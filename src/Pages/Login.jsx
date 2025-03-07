@@ -74,12 +74,17 @@ const Login = () => {
     setLoginError(""); // Reset error message
 
     try {
-      const response = await axios.post(`${backendUrl}login`, data);
+      const response = await axios.post(`${backendUrl}login`, data, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
       const user = response.data.user;
       const token = response.data.token;
 
-      console.log(user)
+      console.log(user);
 
       dispatch(loginUser(user));
       dispatch(setToken(token));
